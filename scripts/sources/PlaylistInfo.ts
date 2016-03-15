@@ -134,11 +134,11 @@ class PlaylistInfo extends SourceItf {
 				self.getSourceNamespaceManager().sendNewInfoToClient(playlistInfo);
 			};
 
-			var retrieveVideosUrl = Utils.API_ENDPOINT+"/playlist/"+this.getParams().DailymotionPlaylistId+"/videos?fields=allow_embed,bookmarks_total,comments_total,created_time,description,title,duration,embed_url,views_total,id,thumbnail_url,thumbnail_720_url,thumbnail_480_url,thumbnail_360_url,thumbnail_120_url,&limit="+this.getParams().Limit;
+			var retrieveVideosUrl = Utils.API_ENDPOINT+"/playlist/"+self.getParams().DailymotionPlaylistId+"/videos?fields=allow_embed,bookmarks_total,comments_total,created_time,description,title,duration,embed_url,views_total,id,thumbnail_url,thumbnail_720_url,thumbnail_480_url,thumbnail_360_url,thumbnail_120_url,&limit="+self.getParams().Limit;
 			RestClient.get(retrieveVideosUrl, successRetrieveVideoInfo, fail);
 		};
 
-		var retrievePlaylistInfo = Utils.API_ENDPOINT+"/playlist/"+this.getParams().DailymotionPlaylistId+"?fields=id,description,videos_total,thumbnail_url,thumbnail_720_url,thumbnail_480_url,thumbnail_360_url,thumbnail_120_url";
+		var retrievePlaylistInfo = Utils.API_ENDPOINT+"/playlist/"+self.getParams().DailymotionPlaylistId+"?fields=id,description,videos_total,thumbnail_url,thumbnail_720_url,thumbnail_480_url,thumbnail_360_url,thumbnail_120_url";
 		RestClient.get(retrievePlaylistInfo, successRetrieveInfo, fail);
 	}
 }
