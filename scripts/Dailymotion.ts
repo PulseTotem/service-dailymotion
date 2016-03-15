@@ -18,8 +18,6 @@
  */
 class Dailymotion extends SourceServer {
 
-	static DailymotionAPIKey : string;
-
     /**
      * Constructor.
      *
@@ -39,13 +37,6 @@ class Dailymotion extends SourceServer {
      */
     init() {
         var self = this;
-
-		if (process.env.Dailymotion_API_KEY == undefined) {
-			Dailymotion.DailymotionAPIKey = "";
-		} else {
-			Dailymotion.DailymotionAPIKey = process.env.Dailymotion_API_KEY;
-		}
-
         this.addNamespace("Dailymotion", DailymotionNamespaceManager);
     }
 }
