@@ -51,11 +51,94 @@ class PlaylistInfo extends SourceItf {
 			}
 		};
 
-		var successRetrieveInfo = function(result1) {
+		var successRetrieveInfo = function(result) {
+			var playlistInfo = new VideoPlaylist(result.id);
 
+			var totalPlaylistDuration = 0;
+
+			playlistInfo.setDescription(result.description);
+			playlistInfo.setTitle(result.description);
+
+			var thumb = new Picture(result.id+"_thumb");
+			thumb.setDescription(result.description);
+
+			var thumb_original = new PictureURL();
+			thumb_original.setURL(result.thumbnail_url);
+
+			var thumb_large = new PictureURL();
+			thumb_large.setURL(result.thumbnail_720_url);
+
+			var thumb_medium = new PictureURL();
+			thumb_medium.setURL(result.thumbnail_480_url);
+
+			var thumb_small = new PictureURL();
+			thumb_small.setURL(result.thumbnail_360_url);
+
+			var thumb_thumb = new PictureURL();
+			thumb_thumb.setURL(result.thumbnail_120_url);
+
+			thumb.setOriginal(thumb_original);
+			thumb.setLarge(thumb_large);
+			thumb.setMedium(thumb_medium);
+			thumb.setSmall(thumb_small);
+			thumb.setThumb(thumb_thumb);
+
+
+			playlistInfo.setThumbnail(thumb);
+
+			var successRetrieveVideoInfo = function (resultList) {
+				var videos = resultList.list;
+
+				for (var i = 0; i < videos.length; i++) {
+					var video = videos[i];
+
+					var videoUrl = new VideoURL(video.id);
+					videoUrl.setType(VideoType.DAILYMOTION);
+					videoUrl.setURL(video.embed_url);
+					videoUrl.setTitle(video.title);
+					videoUrl.setDescription(video.description);
+					videoUrl.setDurationToDisplay(video.duration);
+
+					var thumb = new Picture(video.id+"_thumb");
+					thumb.setDescription(video.description);
+
+					var thumb_original = new PictureURL();
+					thumb_original.setURL(video.thumbnail_url);
+
+					var thumb_large = new PictureURL();
+					thumb_large.setURL(video.thumbnail_720_url);
+
+					var thumb_medium = new PictureURL();
+					thumb_medium.setURL(video.thumbnail_480_url);
+
+					var thumb_small = new PictureURL();
+					thumb_small.setURL(video.thumbnail_360_url);
+
+					var thumb_thumb = new PictureURL();
+					thumb_thumb.setURL(video.thumbnail_120_url);
+
+					thumb.setOriginal(thumb_original);
+					thumb.setLarge(thumb_large);
+					thumb.setMedium(thumb_medium);
+					thumb.setSmall(thumb_small);
+					thumb.setThumb(thumb_thumb);
+
+					videoUrl.setThumbnail(thumb);
+					playlistInfo.addVideo(videoUrl);
+
+					totalPlaylistDuration += video.duration;
+				}
+
+				playlistInfo.setDurationToDisplay(totalPlaylistDuration);
+
+				self.getSourceNamespaceManager().sendNewInfoToClient(playlistInfo);
+			};
+
+			var retrieveVideosUrl = Utils.API_ENDPOINT+"/playlist/"+this.getParams().DailymotionPlaylistId+"/videos?fields=allow_embed,bookmarks_total,comments_total,created_time,description,title,duration,embed_url,views_total,id,thumbnail_url,thumbnail_720_url,thumbnail_480_url,thumbnail_360_url,thumbnail_120_url,&limit="+this.getParams().Limit;
+			RestClient.get(retrieveVideosUrl, successRetrieveVideoInfo, fail);
 		};
 
-		var retrieveInfoUrl = Utils.API_ENDPOINT+"/playlist/"+this.getParams().DailymotionPlaylistId+"?fields=created_time,description,name,owner.screen_name";
-		RestClient.get(retrieveInfoUrl, successRetrieveInfo, fail);
+		var retrievePlaylistInfo = Utils.API_ENDPOINT+"/playlist/"+this.getParams().DailymotionPlaylistId+"?fields=id,description,videos_total,thumbnail_url,thumbnail_720_url,thumbnail_480_url,thumbnail_360_url,thumbnail_120_url";
+		RestClient.get(retrievePlaylistInfo, successRetrieveInfo, fail);
 	}
 }
