@@ -51,7 +51,8 @@ class PlaylistInfo extends SourceItf {
 			}
 		};
 
-		var successRetrieveInfo = function(result) {
+		var successRetrieveInfo = function(resultResponse) {
+			var result = resultResponse.data();
 			var playlistInfo = new VideoPlaylist(result.id);
 
 			var totalPlaylistDuration = 0;
@@ -86,7 +87,8 @@ class PlaylistInfo extends SourceItf {
 
 			playlistInfo.setThumbnail(thumb);
 
-			var successRetrieveVideoInfo = function (resultList) {
+			var successRetrieveVideoInfo = function (resultListResponse) {
+				var resultList = resultListResponse.data();
 				var videos = resultList.list;
 
 				if (Array.isArray(videos)) {
