@@ -134,16 +134,18 @@ class PlaylistInfo extends SourceItf {
 
 					self.getSourceNamespaceManager().sendNewInfoToClient(playlistInfo);
 				} else {
-					fail("Retrieved information from dailymotion do not follow the expected format: "+resultList);
+					fail("Retrieved information from dailymotion do not follow the expected format: "+JSON.stringify(resultList));
 				}
 
 			};
 
 			var retrieveVideosUrl = Utils.API_ENDPOINT+"/playlist/"+self.getParams().DailymotionPlaylistId+"/videos?fields=allow_embed,bookmarks_total,comments_total,created_time,description,title,duration,embed_url,views_total,id,thumbnail_url,thumbnail_720_url,thumbnail_480_url,thumbnail_360_url,thumbnail_120_url,&limit="+self.getParams().Limit;
+			Logger.debug("Request done to the following address: "+retrieveVideosUrl);
 			RestClient.get(retrieveVideosUrl, successRetrieveVideoInfo, fail);
 		};
 
 		var retrievePlaylistInfo = Utils.API_ENDPOINT+"/playlist/"+self.getParams().DailymotionPlaylistId+"?fields=id,description,videos_total,thumbnail_url,thumbnail_720_url,thumbnail_480_url,thumbnail_360_url,thumbnail_120_url";
+		Logger.debug("Request done to the following address: "+retrievePlaylistInfo);
 		RestClient.get(retrievePlaylistInfo, successRetrieveInfo, fail);
 	}
 }
