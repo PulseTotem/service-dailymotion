@@ -134,7 +134,7 @@ class PlaylistInfo extends SourceItf {
 
 					self.getSourceNamespaceManager().sendNewInfoToClient(playlistInfo);
 				} else {
-					fail("Retrieved information from dailymotion do not follow the expected format: "+JSON.stringify(resultList));
+					fail("Retrieved information from dailymotion do not follow the expected format: "+resultList);
 				}
 
 			};
