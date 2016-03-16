@@ -89,49 +89,54 @@ class PlaylistInfo extends SourceItf {
 			var successRetrieveVideoInfo = function (resultList) {
 				var videos = resultList.list;
 
-				for (var i = 0; i < videos.length; i++) {
-					var video = videos[i];
+				if (Array.isArray(videos)) {
+					for (var i = 0; i < videos.length; i++) {
+						var video = videos[i];
 
-					var videoUrl = new VideoURL(video.id);
-					videoUrl.setType(VideoType.DAILYMOTION);
-					videoUrl.setURL(video.embed_url);
-					videoUrl.setTitle(video.title);
-					videoUrl.setDescription(video.description);
-					videoUrl.setDurationToDisplay(video.duration);
+						var videoUrl = new VideoURL(video.id);
+						videoUrl.setType(VideoType.DAILYMOTION);
+						videoUrl.setURL(video.embed_url);
+						videoUrl.setTitle(video.title);
+						videoUrl.setDescription(video.description);
+						videoUrl.setDurationToDisplay(video.duration);
 
-					var thumb = new Picture(video.id+"_thumb");
-					thumb.setDescription(video.description);
+						var thumb = new Picture(video.id+"_thumb");
+						thumb.setDescription(video.description);
 
-					var thumb_original = new PictureURL();
-					thumb_original.setURL(video.thumbnail_url);
+						var thumb_original = new PictureURL();
+						thumb_original.setURL(video.thumbnail_url);
 
-					var thumb_large = new PictureURL();
-					thumb_large.setURL(video.thumbnail_720_url);
+						var thumb_large = new PictureURL();
+						thumb_large.setURL(video.thumbnail_720_url);
 
-					var thumb_medium = new PictureURL();
-					thumb_medium.setURL(video.thumbnail_480_url);
+						var thumb_medium = new PictureURL();
+						thumb_medium.setURL(video.thumbnail_480_url);
 
-					var thumb_small = new PictureURL();
-					thumb_small.setURL(video.thumbnail_360_url);
+						var thumb_small = new PictureURL();
+						thumb_small.setURL(video.thumbnail_360_url);
 
-					var thumb_thumb = new PictureURL();
-					thumb_thumb.setURL(video.thumbnail_120_url);
+						var thumb_thumb = new PictureURL();
+						thumb_thumb.setURL(video.thumbnail_120_url);
 
-					thumb.setOriginal(thumb_original);
-					thumb.setLarge(thumb_large);
-					thumb.setMedium(thumb_medium);
-					thumb.setSmall(thumb_small);
-					thumb.setThumb(thumb_thumb);
+						thumb.setOriginal(thumb_original);
+						thumb.setLarge(thumb_large);
+						thumb.setMedium(thumb_medium);
+						thumb.setSmall(thumb_small);
+						thumb.setThumb(thumb_thumb);
 
-					videoUrl.setThumbnail(thumb);
-					playlistInfo.addVideo(videoUrl);
+						videoUrl.setThumbnail(thumb);
+						playlistInfo.addVideo(videoUrl);
 
-					totalPlaylistDuration += video.duration;
+						totalPlaylistDuration += video.duration;
+					}
+
+					playlistInfo.setDurationToDisplay(totalPlaylistDuration);
+
+					self.getSourceNamespaceManager().sendNewInfoToClient(playlistInfo);
+				} else {
+					fail("Retrieved information from dailymotion do not follow the expected format: "+JSON.stringify(resultList));
 				}
 
-				playlistInfo.setDurationToDisplay(totalPlaylistDuration);
-
-				self.getSourceNamespaceManager().sendNewInfoToClient(playlistInfo);
 			};
 
 			var retrieveVideosUrl = Utils.API_ENDPOINT+"/playlist/"+self.getParams().DailymotionPlaylistId+"/videos?fields=allow_embed,bookmarks_total,comments_total,created_time,description,title,duration,embed_url,views_total,id,thumbnail_url,thumbnail_720_url,thumbnail_480_url,thumbnail_360_url,thumbnail_120_url,&limit="+self.getParams().Limit;
